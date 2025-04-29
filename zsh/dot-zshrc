@@ -1,0 +1,96 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+###############
+##### ZSH #####
+###############
+
+##### The following lines were added by compinstall
+zstyle :compinstall filename '/home/luke/.zshrc'
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+
+##### PATH
+#export PATH=$HOME/.local/bin:$PATH #Added in pam module
+ZSH_CUSTOM=$HOME/.config/zshrc.d
+[[ -d $HOME/.local/share/zsh ]] || mkdir -p $HOME/.local/share/zsh
+
+##### OPTIONS
+HISTFILE=${XDG_DATA_HOME:-$HOME/.local/share}/zsh/histfile
+HISTSIZE=3000
+HISTDUP=erase
+SAVEHIST=100000
+setopt autocd notify
+bindkey -e
+
+setopt append_history
+setopt share_history
+setopt hist_expire_dups_first
+setopt hist_ignore_space
+setopt hist_ignore_all_dups
+setopt hist_ignore_dups
+setopt hist_save_no_dups
+setopt hist_verify
+setopt transient_rprompt
+
+##### PLUGINS
+plugins=(git)
+
+##### EDITOR
+if [[ -n $SSH_CONNECTION ]]; then
+	export EDITOR='vim'
+else
+	export EDITOR='nvim'
+fi
+
+##### COMPILATION FLAGS
+export ARCHFLAGS="-arch $(uname -m)"
+
+##### Highlights and completitions
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+##### LOAD
+source $ZSH_CUSTOM/keybindings.zsh
+source $ZSH_CUSTOM/aliases.zsh
+source $ZSH_CUSTOM/func.zsh
+
+##### TMUX
+#ZSH_TMUX_AUTOSTART="true"
+#ZSH_TMUX_AUTOCONNECT="false"
+#ZSH_TMUX_AUTOQUIT="true"
+
+##### ZOXIDE
+eval "$(zoxide init zsh)"
+
+##### FZF - Set up fzf key bindings and fuzzy completion
+source <(fzf --zsh)
+
+##### STARSHIP PROMT
+#eval "$(starship init zsh)"
+
+##### POWERLEVEL10K PROMPT
+source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# pnpm
+export PNPM_HOME="/home/luke/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+# bun completions
+[ -s "/home/luke/.bun/_bun" ] && source "/home/luke/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

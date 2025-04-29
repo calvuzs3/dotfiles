@@ -1,0 +1,80 @@
+# Set PREFIX
+unbind C-b
+set-option -g prefix C-a  # C-b
+
+# This allows to send C-a 
+bind C-a send-prefix
+
+# This is self explanary
+unbind r
+bind r source-file ~/.config/tmux/tmux.conf
+
+#  The count numbers
+set-option -g base-index 1
+set-option -g pane-base-index 1
+
+# Mouse
+set -g mouse on
+set -g default-terminal "tmux-256color"
+
+# Keys and key-binding
+bind-key _ split-window -h  #%
+bind-key - split-window -v  #"
+#
+bind-key h select-pane -L
+bind-key j select-pane -D
+bind-key k select-pane -U
+bind-key l select-pane -R
+
+# List of plugins
+set -g @tpm_plugin '\
+    tmux-plugins/tpm \
+    tmux-plugins/tmux-sensible \
+    tmux-plugins/tmux-resurrect \
+    catppuccin/tmux \
+    joshmedeski/tmux-nerd-font-window-name \
+    tmux-plugins/tmux-yank \
+    tmux-plugins/tmux-cpu \
+    dreknix/tmux-primary-ip \
+'
+
+# Other examples:
+# set -g @plugin 'github_username/plugin_name'
+# set -g @plugin 'github_username/plugin_name#branch'
+# set -g @plugin 'git@github.com:user/plugin'
+# set -g @plugin 'git@bitbucket.com:user/plugin'
+
+
+# CATPUCCIN - latte, frappe, macchiato or mocha
+set -g @catppuccin_flavor 'macchiato' 
+set -g @catppuccin_window_status_style 'rounded'
+set -g @catppuccin_window_number_position 'right'
+set -g @catppuccin_window_status 'no'
+set -g @catppuccin_window_default_text '#W'
+set -g @catppuccin_window_current_fill 'number'
+set -g @catppuccin_window_current_text '#W'
+set -g @catppuccin_window_current_color '#{E:@thm_surface_2}'
+set -g @catppuccin_date_time_text '%d.%m. %H:%M'
+set -g @catppuccin_status_module_text_bg '#{E:@thm_mantle}'
+
+#source the plugin here
+#run '#{XDG_CONFIG_HOME}/tmux/plugins/tmux/catppuccin.tmux'
+#source -F '#{d:current_file}/custom_modules/primary_ip.conf'
+
+# CONFIG - set left and right status bar
+set -g allow-rename off
+set -g status-position top
+set -g status-interval 5
+set -g status-left-length 100
+set -g status-right-length 100
+set -g status-left '#{E:@catppuccin_status_session} '
+set -gF status-right '#{E:@catppuccin_status_primary_ip}'
+set -agF status-right '#{E:@catppuccin_status_ctp_cpu}'
+set -agF status-right '#{E:@catppuccin_status_ctp_memory}'
+set -ag status-right '#{E:@catppuccin_status_date_time}'
+
+
+
+# Initialize TMUX plugin manager (source all plugins)
+run '#{XDG_CONFIG_HOME}/tmux/plugins/tpm/tpm'
+

@@ -1,0 +1,4 @@
+--target=$HOME
+--dir=$HOME/.dotfiles
+--dotfiles
+--ignore='~'
