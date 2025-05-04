@@ -1,16 +1,25 @@
--- vim:foldmethod=marker
 -- NEOVIM OPTIONS
--- Options are automatically loaded before lazy.nvim startup
--- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
+-- vim:foldmethod=marker
 
 -- Top {{{
 vim.scriptencoding = "utf-8"
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
+vim.g.have_nerd_font = true -- we have NERDFONTS
 
-vim.wo.foldmethod = "expr"
-vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+-- Using UFO plugin
+vim.o.foldcolumn = "1" -- '0' is not bad
+vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+vim.o.foldlevelstart = 99
+vim.o.foldenable = true
+
+-- vim.wo.foldmethod = "marker"
+-- vim.wo.foldmethod = "expr"
+-- vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+
+vim.keymap.set("n", "è", "[", { remap = true, desc = "remapping è -> [" })
+-- vim.keymap.set("n", "+", "]", {remap=true, desc = "remapping + -> ]"})
 
 -- vim.g.loaded_netrw = 1
 -- vim.g.loaded_netrPlugin = 1
@@ -27,7 +36,8 @@ opt.fileencoding = "utf-8" -- set encoding UTF-8
 opt.title = true
 opt.backup = false -- disable backup file creation
 opt.showcmd = true -- show last command
-opt.cmdheight = 0 --
+opt.showmode = false -- don't show mode 'cause it already is in lualine
+-- opt.cmdheight = 0 --
 opt.laststatus = 0 --
 opt.inccommand = "split"
 opt.splitright = true -- split vertical win to the right
@@ -36,6 +46,7 @@ opt.splitkeep = "cursor"
 opt.conceallevel = 0 -- show conceal characters in markdown files
 opt.mouse = "a" -- enable mouse support
 opt.cursorline = true -- enable mouse
+opt.colorcolumn = "80" -- enable a line at column 80
 opt.undofile = true -- enable persistant undo
 opt.clipboard = "unnamedplus" -- enable sys clipboard access
 -- opt.clipboard:append("unnamedplus") -- use sys clipboard as default register

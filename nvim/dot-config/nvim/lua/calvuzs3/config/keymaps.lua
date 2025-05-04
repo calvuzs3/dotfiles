@@ -1,13 +1,13 @@
--- Keymaps are automatically loaded on the VeryLazy event
--- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
+-- vim:foldmethod=marker
 
 -- Coiciseness
 local km = vim.keymap
 local opts = { noremap = true, silent = true }
 
--- vim.g.loaded_netrw = 1
--- vim.g.loaded_netrPlugin = 1
--- Utils
+-- Redo with capital U
+km.set("n", "U", "<C-r", opts)
+
+-- Utils {{{
 km.set("i", "jk", "<ESC>", { desc = "Exit Insert mode (jk)" })
 km.set("n", "<leader>nh", "<cmd>nohl<CR>", { desc = "Clear search highlights" })
 km.set("n", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
@@ -38,7 +38,9 @@ km.set("n", "<leader>bN", "<cmd>bp<CR>", { desc = "Previous buffer" })
 km.set("n", "<leader>bx", "<cmd>bd<CR>", { desc = "Close buffer" })
 km.set("n", "<tab>", "<cmd>bn<CR>", { desc = "Next Buf" })
 km.set("n", "<s-tab>", "<cmd>bp<CR>", { desc = "Prev Buf" })
+-- }}}
 
+-- Extras {{{
 -- Comments-TODO
 local tc = require("todo-comments")
 km.set("n", "]t", function()
@@ -52,4 +54,21 @@ end, { desc = "Previous todo comment" })
 km.set({ "n", "v" }, "<F7>", "<cmd>CommentToggle<CR>", { desc = "Comment toggle" })
 
 -- Markdown Preview
-vim.keymap.set("n", "<leader>mp", ":MarkdownPreviewToggle<CR>", { desc = "Markdown preview toggle" })
+km.set("n", "<leader>mp", ":MarkdownPreviewToggle<CR>", { desc = "Markdown preview toggle" })
+
+-- Conform formatting
+km.set("n", "<leader>fmm", function()
+  require("conform").format({
+    lsp_format = "fallback",
+  })
+end, { desc = "Conform format code CurBuff" })
+
+-- OIL
+km.set("n", "-", "<cmd>Oil --float<CR>", { desc = "Oil FILE browser" })
+
+-- LSP - DIAGNOSTICS
+km.set("n", "gl", function()
+  vim.diagnostic.open_float()
+end, { desc = "Open Diagnostics in FloatWin" })
+
+--}}}

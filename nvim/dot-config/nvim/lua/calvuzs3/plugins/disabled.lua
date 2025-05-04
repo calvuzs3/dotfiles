@@ -3,6 +3,6 @@ return {
   --- TROUBLE
   { "folke/trouble.nvim", enabled = false },
 
-  --  noice
+  -- NOICE
   { "folke/noice.nvim", enabled = false },
 }
