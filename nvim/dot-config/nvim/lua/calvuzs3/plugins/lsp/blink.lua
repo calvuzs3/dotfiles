@@ -4,6 +4,7 @@ return {
   dependencies = {
     "rafamadriz/friendly-snippets",
     "moyiz/blink-emoji.nvim",
+    "MahanRahmati/blink-nerdfont.nvim", -- NerdFont triggered by ':'
   },
 
   -- use a release tag to download pre-built binaries
@@ -43,31 +44,56 @@ return {
     -- Default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
-      default = { "lsp", "path", "snippets", "buffer", "emoji", "sql" },
+      default = {
+        "lsp",
+        "path",
+        "snippets",
+        "buffer",
+        "emoji",
+        "sql",
+        "nerdfont",
+      },
       -- per_filetype = { sql = { "sql" } },
+      per_filetype = {
+        sql = { "snippets", "dadbod", "buffer" },
+      },
       providers = {
-        emoji = {
-          module = "blink-emoji",
-          name = "Emoji",
-          score_offset = 15, -- Tune by preference
-          opts = { insert = true }, -- Insert emoji (default) or complete its name
-          should_show_items = function()
-            return vim.tbl_contains(
-              -- Enable emoji completion only for git commits and markdown.
-              -- By default, enabled for all file-types.
-              { "gitcommit", "markdown" },
-              vim.o.filetype
-            )
-          end,
+        -- add vim-dadbod-completion to your completion providers
+        dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
+        lazydev = {
+          name = "LazyDev",
+          module = "lazydev.integrations.blink",
+          -- make lazydev completions top priority (see `:h blink.cmp`)
+          score_offset = 100,
         },
         sql = {
           module = "blink.cmp.sources.lsp",
           name = "sql",
           score_offset = -9, -- Tune by preference
           opts = {},
-          should_show_items = function()
-            return vim.tbl_contains({ "sql" }, vim.o.filetype)
-          end,
+          -- should_show_items = function()
+          --   return vim.tbl_contains({ "sql" }, vim.o.filetype)
+          -- end,
+        },
+        emoji = {
+          module = "blink-emoji",
+          name = "Emoji",
+          score_offset = 15, -- Tune by preference
+          opts = { insert = true }, -- Insert emoji (default) or complete its name
+          -- should_show_items = function()
+          --   return vim.tbl_contains(
+          --     -- Enable emoji completion only for git commits and markdown.
+          --     -- By default, enabled for all file-types.
+          --     { "gitcommit", "markdown" },
+          --     vim.o.filetype
+          --   )
+          -- end,
+        },
+        nerdfont = {
+          module = "blink-nerdfont",
+          name = "Nerd Fonts",
+          score_offset = 15, -- Tune by preference
+          opts = { insert = true }, -- Insert nerdfont icon (default) or complete its name
         },
       },
     },

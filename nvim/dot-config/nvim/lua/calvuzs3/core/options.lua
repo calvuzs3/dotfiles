@@ -1,34 +1,24 @@
 -- NEOVIM OPTIONS
 -- vim:foldmethod=marker
 
--- Top {{{
+-- For coinciseness
+local opt = vim.opt
+local vg = vim.g
+local vo = vim.o
+
 vim.scriptencoding = "utf-8"
 
-vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
-vim.g.have_nerd_font = true -- we have NERDFONTS
-
+-- Top {{{
+-- General
+vg.mapleader = " "
+vg.maplocalleader = "\\"
+vg.have_nerd_font = true -- we have NERDFONTS
 -- Using UFO plugin
-vim.o.foldcolumn = "1" -- '0' is not bad
-vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
-vim.o.foldlevelstart = 99
-vim.o.foldenable = true
-
--- vim.wo.foldmethod = "marker"
--- vim.wo.foldmethod = "expr"
--- vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-
-vim.keymap.set("n", "è", "[", { remap = true, desc = "remapping è -> [" })
--- vim.keymap.set("n", "+", "]", {remap=true, desc = "remapping + -> ]"})
-
--- vim.g.loaded_netrw = 1
--- vim.g.loaded_netrPlugin = 1
--- vim.cmd("let g:newtr_liststyle = 3 ") -- Style for the :Explore
+vo.foldcolumn = "0" -- '0' is not bad
+vo.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+vo.foldlevelstart = 99
+vo.foldenable = true
 --}}}
-
--- Coinciseness {{{
-local opt = vim.opt
--- }}}
 
 -- General {{{
 opt.encoding = "utf-8" -- set encoding UTF-8
@@ -48,16 +38,15 @@ opt.mouse = "a" -- enable mouse support
 opt.cursorline = true -- enable mouse
 opt.colorcolumn = "80" -- enable a line at column 80
 opt.undofile = true -- enable persistant undo
-opt.clipboard = "unnamedplus" -- enable sys clipboard access
--- opt.clipboard:append("unnamedplus") -- use sys clipboard as default register
+opt.clipboard = "unnamed,unnamedplus" -- enable sys clipboard access
 opt.path:append({ "**" }) -- Search down in subfolders
 opt.wildignore:append({ "*/node_modules/*" }) -- Avoid node_modules
+opt.formatoptions:append({ "r" })
 -- }}}
 
 -- Colors {{{
 opt.termguicolors = true -- enable term GUI colors
--- opt.background = "dark"  -- light || dark
-opt.formatoptions:append({ "r" })
+opt.background = "dark" -- light || dark
 -- }}}
 
 -- Spacing / Behaviors {{{
@@ -77,7 +66,6 @@ opt.shiftwidth = 2 -- number of spaces inserted for each indentation level
 opt.expandtab = true -- convert tabs to spaces
 opt.breakindent = true -- enable line breaking indentation
 opt.backspace = { "start", "eol", "indent" } -- allow bcakspace on indent EOL or 'I'start position
-opt.foldmethod = "marker"
 -- }}}
 
 -- Search {{{
@@ -93,4 +81,15 @@ opt.smartcase = true -- case is smart
 -- vim.cmd("let g:python3_host_prog = '~/.local/share/nvim/mason/packages/black/venv/bin/python'")
 opt.virtualedit = "block" -- (C-v) Visual-BLOCK made easy
 
+opt.guicursor = {
+  "n-v-c:block", -- Normal, visual, command-line: block cursor
+  "i-ci-ve:ver25", -- Insert, command-line insert, visual-exclude: vertical bar cursor with 25% width
+  "r-cr:hor20", -- Replace, command-line replace: horizontal bar cursor with 20% height
+  "o:hor50", -- Operator-pending: horizontal bar cursor with 50% height
+  "a:blinkwait700-blinkoff400-blinkon250", -- All modes: blinking settings
+  "sm:block-blinkwait175-blinkoff150-blinkon175", -- Showmatch: block cursor with specific blinking settings
+}
 -- }}}
+
+-- HARPOON DEBUG
+vim.g.harpoon_log_level = "debug"
