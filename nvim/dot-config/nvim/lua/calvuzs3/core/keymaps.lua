@@ -1,11 +1,11 @@
 -- Get utils
+local vim = vim
 local nnoremap = require("calvuzs3.core.keymap-utils").nnoremap
 local vnoremap = require("calvuzs3.core.keymap-utils").vnoremap
 local inoremap = require("calvuzs3.core.keymap-utils").inoremap
 local tnoremap = require("calvuzs3.core.keymap-utils").tnoremap
 local xnoremap = require("calvuzs3.core.keymap-utils").xnoremap
-local harpoon_ui = require("harpoon.ui")
-local harpoon_mark = require("harpoon.mark")
+local comment = require("Comment.api")
 local illuminate = require("illuminate")
 local utils = require("calvuzs3.core.user-utils")
 
@@ -61,19 +61,7 @@ end)
 -- Swap between last two buffers
 nnoremap("<leader>'", "<C-^>", { desc = "Switch to last buffer" })
 
--- Save with leader key
-nnoremap("<leader>w", "<cmd>w<cr>", { silent = false })
-
--- Quit with leader key
-nnoremap("<leader>q", "<cmd>q<cr>", { silent = false })
-
--- Save and Quit with leader key
-nnoremap("<leader>z", "<cmd>wq<cr>", { silent = false })
-
 -- OIL - file manager like a buffer
-nnoremap("<leader>e", function()
-  require("oil").toggle_float()
-end)
 nnoremap("-", "<cmd>Oil --float<CR>", { desc = "Oil FILE browser" })
 
 -- Center buffer while navigating
@@ -96,12 +84,12 @@ nnoremap("S", function()
   local cmd = ":%s/<C-r><C-w>/<C-r><C-w>/gI<Left><Left><Left>"
   local keys = vim.api.nvim_replace_termcodes(cmd, true, false, true)
   vim.api.nvim_feedkeys(keys, "n", false)
-end)
+end, { desc = "[S]ubstitution" })
 
 -- Open Spectre for global find/replace
-nnoremap("<leader>S", function()
+nnoremap("<leader>SS", function()
   require("spectre").toggle()
-end)
+end, { desc = "[S]pectre find and replace" })
 
 -- Open Spectre for global find/replace for the word under the cursor in normal mode
 nnoremap("<leader>sw", '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
@@ -165,7 +153,7 @@ nnoremap("<leader>d", function()
   vim.diagnostic.open_float({
     border = "rounded",
   })
-end)
+end, { desc = "Open [D]iagnostics in a float win" })
 
 -- Place all dignostics into a qflist
 nnoremap("<leader>ld", vim.diagnostic.setqflist, { desc = "Quickfix [L]ist [D]iagnostics" })
@@ -201,48 +189,13 @@ nnoremap("gx", ":sil !open <cWORD><cr>", { silent = true })
 -- TSC autocommand keybind to run TypeScripts tsc
 nnoremap("<leader>tc", ":TSC<cr>", { desc = "[T]ypeScript [C]ompile" })
 
--- HARPOON --
+-- GRAPPLE - a replace for Harpoon, which doesn't seem to work
 
--- Open harpoon ui
-nnoremap("<leader>ho", function()
-  harpoon_ui.toggle_quick_menu()
-end, { desc = "[H]arpoon [O]pen" })
-
--- Add current file to harpoon
-nnoremap("<leader>ha", function()
-  harpoon_mark.add_file()
-end, { desc = "[H]arpoon [A]dd" })
-
--- Remove current file from harpoon
-nnoremap("<leader>hr", function()
-  harpoon_mark.rm_file()
-end, { desc = "[H]arpoon [R]emove" })
-
--- Remove all files from harpoon
-nnoremap("<leader>hc", function()
-  harpoon_mark.clear_all()
-end, { desc = "[H]arpoon [C]lear all" })
-
--- Quickly jump to harpooned files
-nnoremap("<leader>h1", function()
-  harpoon_ui.nav_file(1)
-end)
-
-nnoremap("<leader>h2", function()
-  harpoon_ui.nav_file(2)
-end)
-
-nnoremap("<leader>h3", function()
-  harpoon_ui.nav_file(3)
-end)
-
-nnoremap("<leader>h4", function()
-  harpoon_ui.nav_file(4)
-end)
-
-nnoremap("<leader>h5", function()
-  harpoon_ui.nav_file(5)
-end)
+-- Open Grapple ui
+nnoremap("<leader>ho", "<cmd>Grapple toggle_tags<cr>", { desc = "Grapple[H] [O]pen tags window" })
+nnoremap("<leader>ht", "<cmd>Grapple toggle<cr>", { desc = "Grapple[H]] [T]oggle tag" })
+nnoremap("<leader>hn", "<cmd>Grapple cycle_tags next<cr>", { desc = "Grapple[H] cycle [N]ext tag" })
+nnoremap("<leader>hp", "<cmd>Grapple cycle_tags prev<cr>", { desc = "Grapple[H] cycle [P]rev tag" })
 
 -- GIT --
 
@@ -342,7 +295,7 @@ M.map_lsp_keybinds = function(buffer_number)
 end
 
 -- Symbol Outline keybind
-nnoremap("<leader>so", ":SymbolsOutline<cr>")
+nnoremap("<leader>st", ":SymbolsOutline<cr>", { desc = "[S]ysmbols Outline [T]ree" })
 
 -- Vim Illuminate keybinds
 nnoremap("<leader>]", function()
@@ -363,12 +316,6 @@ end, { desc = "[O]pen [C]opilot panel" })
 -- nvim-ufo keybinds
 nnoremap("zR", require("ufo").openAllFolds)
 nnoremap("zM", require("ufo").closeAllFolds)
-
--- Windows
-nnoremap("<leader>sv", "<C-w>v", { desc = "Split Vertically" })
-nnoremap("<leader>sh", "<C-w>s", { desc = "Split Horizontally" })
-nnoremap("<leader>se", "<C-w>=", { desc = "Splits Equal size" })
-nnoremap("<leader>sx", "<cmd>close<CR>", { desc = "Close current window" })
 
 -- Tabs
 nnoremap("<leader>to", "<cmd>tabnew<CR>", { desc = "Open new Tab" })
@@ -393,9 +340,9 @@ nnoremap("[t", function()
   tc.jump_prev()
 end, { desc = "Previous todo comment" })
 
--- Comments
-nnoremap("<F7>", "<cmd>CommentToggle<CR>", { desc = "Comment toggle" })
-vnoremap("<F7>", "<cmd>CommentToggle<CR>", { desc = "Comment toggle" })
+-- Comments - fast iomplementation for gcc (gbc)
+nnoremap("<C-c>", comment.toggle.linewise.current, { desc = "Comment Toggle" })
+nnoremap("<C-/>", comment.toggle.linewise.current, { desc = "Comment Toggle" })
 
 -- Markdown Preview
 nnoremap("<leader>mp", ":MarkdownPreviewToggle<CR>", { desc = "Markdown preview toggle" })
@@ -405,13 +352,13 @@ nnoremap("<leader>fmm", function()
   require("conform").format({
     lsp_format = "fallback",
   })
-end, { desc = "Conform format code CurBuff" })
+end, { desc = "[C]onform [F]ormat code CurBuf[F]" })
 
 -- Normal --
 nnoremap("x", '"_x"', { desc = "Keymap hole" })
 
 -- Insert --
-inoremap("jk", "<esc>") -- map JK to exit I-mode
+inoremap("jk", "<esc>") -- map JK to exit I-mod bne
 
 -- Visual --
 vnoremap("<space>", "<nop>") -- Disable Space bar since it'll be used as the leader key

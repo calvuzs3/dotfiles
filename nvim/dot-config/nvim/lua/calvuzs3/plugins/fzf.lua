@@ -90,14 +90,14 @@ return {
         desc = "FZF find Keymaps",
       },
       {
-        "<leader><leader>",
+        "<leader>f<leader>",
         function()
           require("fzf-lua").buffers()
         end,
         desc = "FZF Buffers",
       },
       {
-        "<leader>/",
+        "<leader>f/",
         function()
           require("fzf-lua").lgrep_curbuf()
         end,
