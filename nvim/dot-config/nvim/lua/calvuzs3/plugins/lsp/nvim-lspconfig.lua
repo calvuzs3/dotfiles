@@ -222,11 +222,27 @@ return {
           -- capabilities = {},
           settings = {
             Lua = {
+              -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+              runtime = {
+                version = "LuaJIT",
+              },
+              -- Make the server aware of Neovim runtime files
+              workspace = {
+                library = vim.api.nvim_get_runtime_file("", true),
+              },
               completion = {
                 callSnippet = "Replace",
               },
               -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-              diagnostics = { disable = { "missing-fields" } },
+              diagnostics = {
+                enable = true,
+                globals = { "vim" },
+                disable = { "missing-fields" },
+              },
+              -- Do not send telemetry data containing a randomized but unique identifier
+              telemetry = {
+                enable = false,
+              },
             },
           },
         },
