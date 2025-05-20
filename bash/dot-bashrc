@@ -5,15 +5,13 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# Autocompletion
+bind 'TAB:menu-complete'
+
 # Git
 source /usr/share/git/completion/git-prompt.sh
 PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
 
 # Aliases
-alias ls='ls --color=auto'
-alias grep='grep --color=auto'
-alias l='ls -1'
-alias ll='ls -l'
-alias la='ls -a'
-alias lla='ls -la'
+source ~/.config/zshrc.d/aliases.zsh
 
