@@ -1,0 +1,1 @@
+/home/luke/AndroidStudioProjects/QDue/app/src/main/java/net/calvuz/qdue/events/utilities/qd-stop-events-generator.sh
